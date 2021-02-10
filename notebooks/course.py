@@ -33,13 +33,13 @@ df_details = pd.DataFrame(
         {'day': 1, 'Topic': "python basic in 5'"},
         {'day': 1, 'Topic': 'lists and generators'},
         {'day': 1, 'Topic': 'bisect module'},
-        {'day': 1, 'Topic': 'Exercise 01 - setup your environment'},
+        {'day': 1, 'Topic': 'Exercise2 01 - setup your environment'},
         # ----------------------------
         {'day': 2, 'Topic': 'Functions and dangrous mistakes'},
         {'day': 2, 'Topic': 'Zen of Python and general coding philosophy'},
         {'day': 2, 'Topic': 'csv module'},
         {'day': 2, 'Topic': 'Collections module'},
-        {'day': 2, 'Topic': 'Exercise 2'},
+        {'day': 2, 'Topic': 'Exercise2 2'},
         # ----------------------------
         {'day': 3, 'Topic': 'Discussion of Excercises 1 & 2'},
         {'day': 3, 'Topic': 'Basic plotting with plotly'},

@@ -6,9 +6,11 @@ import pandas as pd
 def get_as_sequence_list():
     """
     Generates a list containing the 1-letter code of the aminoacid sequence of the gpcr
-    :return: aas_list as list containing the one letter code of the aminoacid sequence
+
+    Returns: aas_list as list containing the one letter code of the aminoacid sequence
+
     """
-    amino_acid_sequence = []
+    amino_acid_sequence = ""
     with open("uniprot_gpcr.fasta") as gpcr_fasta:
         for line in gpcr_fasta:
             if not line.startswith('>'):
@@ -26,25 +28,20 @@ def get_hydropathy_dictionary():
     return aa_hydropathy
 
 
-def sequence_hydropathy_list(sequence, dictionary, len_window):
-    seq_hydropathy_list = []
-    for aa in sequence:
-        for key in dictionary.keys():
-            if aa == key:
-                seq_hydropathy_list.append(dictionary[key])
+def sequence_hydropathy_list(sequence, hydropathy_dict, len_window=1):
+    seq_hydropathy_list = [hydropathy_dict[aa] for aa in sequence]
+    seq_hydropathy_mean = []
+    window = deque([], maxlen=len_window)
 
-    if len_window > 1:
-        seq_hydropathy_mean = []
-        window = deque([], maxlen=len_window)
-        for pos, aa in enumerate(seq_hydropathy_list):
-            window.append(aa)
-            window_mean = sum(window) / len(window)
-            seq_hydropathy_mean.append(window_mean)
-        seq_hydropathy_list = seq_hydropathy_mean
+    for aa in seq_hydropathy_list:
+        window.append(aa)
+        window_mean = sum(window) / len(window)
+        seq_hydropathy_mean.append(window_mean)
+    seq_hydropathy_list = seq_hydropathy_mean
     return seq_hydropathy_list
 
 
-def plot_hydropathy_histogram(sequence, hydropathy, len_windows):
+def plot_hydropathy_histogram(sequence, hydropathy, len_windows=1):
     seq_pos = []
     [seq_pos.append(pos) for pos in range(0, len(sequence))]
     graph = [plotly.graph_objs.Bar(x=seq_pos, y=hydropathy)]
@@ -52,7 +49,7 @@ def plot_hydropathy_histogram(sequence, hydropathy, len_windows):
     fig = plotly.graph_objs.Figure(data=graph, layout={"title": {
         "text": "Aminoacid Hydropathy For G-protein Coupled Receptor 183 With Sliding Window Of " + str(
             len_windows)}, })
-    fig.update_layout(xaxis=dict(title='Sequence position'), yaxis=dict(title='Aminoacid Hydropathy'), )
+    fig.update_layout(xaxis=dict(title='Sequence position'), yaxis=dict(title='Aminoacid Hydropathy'))
     fig.show()
 
 
