@@ -2,7 +2,6 @@ import plotly.io as pio
 from collections import deque
 import pandas as pd
 import requests
-from pathlib import Path
 from Exercise3 import Exercise3 as Ex3
 pio.renderers.default = "browser"
 
@@ -20,7 +19,8 @@ class Protein(object):
         """
         Gets the sequence corresponding to the protein-id from uniprot and returns it as a list.
 
-        Returns: List containing the protein sequence as 1-letter-codes.
+        Returns:
+            List containing the protein sequence as 1-letter-codes.
 
         """
         url = 'https://www.uniprot.org/uniprot/' + self.protein_id + '.fasta?fil=reviewed:yes'
@@ -49,7 +49,8 @@ class Protein(object):
              aa_lookup.
             len_window: Integer giving the length of the sliding average window, default value is 1.
 
-        Returns: List contaiing the property-calue for each aminoacid in the proteins' sequence.
+        Returns:
+            List contaiing the property-calue for each aminoacid in the proteins' sequence.
 
         """
         sequence = self.get_data()
@@ -63,7 +64,7 @@ class Protein(object):
             for aa in seq_property_list:
                 window.append(aa)
                 window_mean = sum(window) / len(window)
-                seq_property_mean.append(window_mean)
+                seq_property_mean.append(round(window_mean, 1))
             seq_property_list = seq_property_mean
         return seq_property_list
 
@@ -72,7 +73,8 @@ def get_aa_properties_lookup_dict():
     """
     Gets the data for the aminoacid properties and puts them in a nested dictionary.
 
-    Returns: nested dictionary with properties as keys and dictionaries containing the property values for aminoacids.
+    Returns:
+        nested dictionary with properties as keys and dictionaries containing the property values for aminoacids.
 
     """
     aa_properties = pd.read_csv('../data/amino_acid_properties.csv')
@@ -91,8 +93,7 @@ def get_aa_properties_lookup_dict():
 if __name__ == "__main__":
     lookupdict = get_aa_properties_lookup_dict()
     protein = Protein("P32249")
-    # print(protein.get_data())
-    window_len = 1
+    window_len = 10
     mapped_sequence = protein.map(lookupdict, "hydropathy index (Kyte-Doolittle method)", window_len)
     print(mapped_sequence)
-    # Ex3.plot_hydropathy_histogram(protein.get_data(), mapped_sequence, window_len)
+    Ex3.plot_hydropathy_histogram(protein.get_data(), mapped_sequence, window_len)

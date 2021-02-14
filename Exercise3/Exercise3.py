@@ -49,7 +49,7 @@ def plot_hydropathy_histogram(sequence, hydropathy, len_windows=1):
     fig = plotly.graph_objs.Figure(data=graph, layout={"title": {
         "text": "Aminoacid Hydropathy For G-protein Coupled Receptor 183 With Sliding Window Of " + str(
             len_windows)}, })
-    fig.update_layout(xaxis=dict(title='Sequence position'), yaxis=dict(title='Aminoacid Hydropathy'))
+    fig.update_layout(xaxis=dict(title='Sequence position'), yaxis=dict(title='Aminoacid Hydropathy'), template='seaborn')
     fig.show()
 
 

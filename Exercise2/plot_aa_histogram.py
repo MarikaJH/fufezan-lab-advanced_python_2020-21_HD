@@ -16,7 +16,7 @@ def plot_histogram(data, title):
 
     graph = [plotly.graph_objs.Bar(x=amino_acids, y=amino_acids_counts)]
     fig = plotly.graph_objs.Figure(data=graph, layout={"title": {"text": title}})
-    fig.update_layout(xaxis=dict(title='aminoacid'), yaxis=dict(title='counts'), template="plotly")
+    fig.update_layout(xaxis=dict(title='aminoacid'), yaxis=dict(title='counts'), template="seaborn")
     fig.show()
 
 

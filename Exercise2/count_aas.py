@@ -1,5 +1,6 @@
 import collections
 import csv
+import argparse
 
 def count_amino_acids(fasta_file):
     """
@@ -17,19 +18,26 @@ def count_amino_acids(fasta_file):
 
 
 if __name__ == "__main__":
-    organism_list = ["human", "mouse", "A_thaliana", "B_subtilis", "M_maripaludis"]
+    # example command for terminal:
+    # python Exercise2\count_aas.py --fasta_path Exercise2\species\human.fasta --csv_path .\Exercise2\human_aa_distribution.csv
 
-    for organism in organism_list:
-        with open("species/" + organism + '.fasta') as aminoacids_sequence:
-            aa = count_amino_acids(aminoacids_sequence)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--fasta_path", help="path of the FASTA file with the sequences to be analyzed", type=str)
+    parser.add_argument("--csv_path", help="path for the csv file in which the output will be stored", type=str)
+    arguments = parser.parse_args()
+    fasta_file_path = arguments.fasta_path
+    csv_path = arguments.csv_path
 
-        print("aminoacid counts for " + organism)
-        for aminoacid in aa:
-            print(aminoacid + ": " + str(aa[aminoacid]))
+    with open(fasta_file_path) as aminoacids_sequence:
+        aa = count_amino_acids(aminoacids_sequence)
+    aa_sorted = sorted(aa.items())
 
-        a_file = open(organism + "_aa_distribution.csv", "w")
-        writer = csv.writer(a_file)
-        writer.writerow(['aa', 'count'])
-        for key, value in aa.items():
-            writer.writerow([key, value])
+    print("aminoacid counts for fasta file")
+    for aminoacid in aa_sorted:
+        print(aminoacid[0] + ": " + str(aminoacid[1]))
 
+    a_file = open(csv_path, "w")
+    writer = csv.writer(a_file)
+    writer.writerow(['aa', 'count'])
+    for aa_count in aa_sorted:
+        writer.writerow([aa_count[0], aa_count[1]])
